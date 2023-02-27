@@ -8,9 +8,13 @@
 int main(int argc, char *argv[])
 {
     QCoreApplication a(argc, argv);
+    bool connected = false;
 
     QTcpSocket socket;
-    socket.connectToHost("localhost", 8080);
+    while (!connected) {
+        socket.connectToHost("localhost", 8080);
+        connected = socket.waitForConnected(1000); // Attendre jusqu'à 1 seconde
+    }
 
     if (socket.waitForConnected())
     {
@@ -34,6 +38,9 @@ int main(int argc, char *argv[])
         {
             qDebug() << "Failed to receive folder names";
         }
+
+        QByteArray receivedData = socket.readAll();
+        qDebug() << "Received data:" << receivedData;
 
         socket.disconnectFromHost();
         socket.waitForDisconnected();

@@ -45,12 +45,11 @@ int main(int argc, char *argv[])
 
     while (true)
     {
-        QTcpSocket* client = server.nextPendingConnection();
-        qDebug() << "Waiting client";
-
-        if (client)
+        if (server.waitForNewConnection(1000)) // attendre une nouvelle connexion pendant 1 seconde
         {
+            QTcpSocket* client = server.nextPendingConnection();
             qDebug() << "New client connected";
+            QByteArray welcomeMessage = "Welcome to the server!";
 
             QList<QString> folderNames = listFolders("c:/");
             QByteArray block;
@@ -67,6 +66,10 @@ int main(int argc, char *argv[])
 
             client->disconnectFromHost();
             client->deleteLater();
+        }
+        else
+        {
+            qDebug() << "Waiting client";
         }
     }
 

@@ -21,11 +21,12 @@ QList<QString> listFolders(const QString& path)
             // S'il s'agit d'un répertoire, on l'ajoute à la liste
             folderNames << entry.absoluteFilePath();
             // On appelle récursivement la fonction pour explorer les sous-répertoires
-            QList<QString> subFolderNames = listFolders(entry.absoluteFilePath());
-            folderNames.append(subFolderNames);
+//            QList<QString> subFolderNames = listFolders(entry.absoluteFilePath());
+//            folderNames.append(subFolderNames);
         }
     }
 
+    qDebug() << folderNames;
     return folderNames;
 }
 
@@ -49,11 +50,11 @@ int main(int argc, char *argv[])
         {
             QTcpSocket* client = server.nextPendingConnection();
             qDebug() << "New client connected";
-            QByteArray welcomeMessage = "Welcome to the server!";
 
-            QList<QString> folderNames = listFolders("c:/");
             QByteArray block;
             QDataStream out(&block, QIODevice::WriteOnly);
+
+            QList<QString> folderNames = listFolders("c:/");
             out << folderNames;
 
             // Envoi de la liste des noms de dossiers au client
@@ -64,8 +65,8 @@ int main(int argc, char *argv[])
                 qDebug() << "Error sending data to client";
             }
 
-            client->disconnectFromHost();
-            client->deleteLater();
+//            client->disconnectFromHost();
+//            client->deleteLater();
         }
         else
         {

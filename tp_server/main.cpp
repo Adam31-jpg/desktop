@@ -30,6 +30,32 @@ QList<QString> listFolders(const QString& path)
     return folderNames;
 }
 
+void handleNewConnection(QTcpServer* server)
+{
+    while (server->hasPendingConnections())
+    {
+        QTcpSocket* client = server->nextPendingConnection();
+        qDebug() << "New client connected";
+
+        QByteArray block;
+        QDataStream out(&block, QIODevice::WriteOnly);
+
+        QList<QString> folderNames = listFolders("c:/");
+        out << folderNames;
+
+        // Envoi de la liste des noms de dossiers au client
+        client->write(block);
+
+        // Attente de la confirmation de la réception des données
+        if (!client->waitForBytesWritten()) {
+            qDebug() << "Error sending data to client";
+        }
+
+//            client->disconnectFromHost();
+//            client->deleteLater();
+    }
+}
+
 int main(int argc, char *argv[])
 {
     QCoreApplication a(argc, argv);
@@ -44,35 +70,7 @@ int main(int argc, char *argv[])
 
     qDebug() << "Server started";
 
-    while (true)
-    {
-        if (server.waitForNewConnection(10000)) // attendre une nouvelle connexion pendant 1 seconde
-        {
-            QTcpSocket* client = server.nextPendingConnection();
-            qDebug() << "New client connected";
-
-            QByteArray block;
-            QDataStream out(&block, QIODevice::WriteOnly);
-
-            QList<QString> folderNames = listFolders("c:/");
-            out << folderNames;
-
-            // Envoi de la liste des noms de dossiers au client
-            client->write(block);
-
-            // Attente de la confirmation de la réception des données
-            if (!client->waitForBytesWritten()) {
-                qDebug() << "Error sending data to client";
-            }
-
-//            client->disconnectFromHost();
-//            client->deleteLater();
-        }
-        else
-        {
-            qDebug() << "Waiting client";
-        }
-    }
+    QObject::connect(&server, &QTcpServer::newConnection, [&server](){handleNewConnection(&server);});
 
     return a.exec();
 }

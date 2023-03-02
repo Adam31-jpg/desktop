@@ -46,7 +46,7 @@ int main(int argc, char *argv[])
 
     while (true)
     {
-        if (server.waitForNewConnection(1000)) // attendre une nouvelle connexion pendant 1 seconde
+        if (server.waitForNewConnection(10000)) // attendre une nouvelle connexion pendant 1 seconde
         {
             QTcpSocket* client = server.nextPendingConnection();
             qDebug() << "New client connected";

@@ -1,7 +1,7 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
-#include <QListView>
 
+#include <QListView>
 #include <QMainWindow>
 
 QT_BEGIN_NAMESPACE
@@ -24,5 +24,8 @@ private slots:
 
 private:
     Ui::MainWindow *ui;
+    void initConnection();
+    void receiveData();
 };
+
 #endif // MAINWINDOW_H

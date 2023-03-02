@@ -7,6 +7,9 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    connect(ui->searchTxt, SIGNAL(textChanged(QString)), this, SLOT(on_lineEdit_textChanged(QString)));
+    connect(ui->btnTxt, &QPushButton::clicked, this, &MainWindow::on_btnTxt_clicked);
+
 }
 
 MainWindow::~MainWindow()
@@ -16,49 +19,49 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_btnTxt_clicked()
 {
-    QStringList list;
+//    QStringList list;
 
-    for(int i = 0; i < 1000; i++){
-        list.append(QString::number(i));
-    }
+//    for(int i = 0; i < 1000; i++){
+//        list.append(QString::number(i));
+//    }
 
-    // Obtenir la référence de la QListView
-    QListView* listView = ui->listView;
+//    // Obtenir la référence de la QListView
+//    QListView* listView = ui->listView;
 
-    // Créer un modèle pour la liste
-    QStringListModel* model = new QStringListModel(list, this);
+//    // Créer un modèle pour la liste
+//    QStringListModel* model = new QStringListModel(list, this);
 
-    // Affecter le modèle à la QListView
-    listView->setModel(model);
+//    // Affecter le modèle à la QListView
+//    listView->setModel(model);
 
-    // Connecter le signal textChanged() du QLineEdit à la fonction on_lineEdit_textChanged()
-    connect(ui->searchTxt, &QLineEdit::textChanged, this, &MainWindow::on_lineEdit_textChanged);
+//    // Connecter le signal textChanged() du QLineEdit à la fonction on_lineEdit_textChanged()
+//    connect(ui->searchTxt, &QLineEdit::textChanged, this, &MainWindow::on_lineEdit_textChanged);
 }
 
 void MainWindow::on_lineEdit_textChanged(const QString &text)
 {
     // Obtenir le modèle de la QListView
-    QAbstractItemModel* model = ui->listView->model();
+//    QAbstractItemModel* model = ui->listView->model();
 
-    if(model) {
-        QStringList list;
+//    if(model) {
+//        QStringList list;
 
-        // Parcourir la liste d'éléments du modèle et ajouter les éléments qui contiennent le texte filtré
-        for(int i = 0; i < model->rowCount(); i++) {
-            QModelIndex index = model->index(i, 0);
-            QString itemText  = model->data(index, Qt::DisplayRole).toString();
+//        // Parcourir la liste d'éléments du modèle et ajouter les éléments qui contiennent le texte filtré
+//        for(int i = 0; i < model->rowCount(); i++) {
+//            QModelIndex index = model->index(i, 0);
+//            QString itemText  = model->data(index, Qt::DisplayRole).toString();
 
-            if(itemText .contains(text, Qt::CaseInsensitive)) {
-                list.append(itemText);
-            }
-        }
+//            if(itemText .contains(text, Qt::CaseInsensitive)) {
+//                list.append(itemText);
+//            }
+//        }
 
-        // Mettre à jour la liste filtrée dans le modèle de la QListView
-        QStringListModel* stringListModel = qobject_cast<QStringListModel*>(model);
-        if(stringListModel) {
-            stringListModel->setStringList(list);
-        }
-    }
+//        // Mettre à jour la liste filtrée dans le modèle de la QListView
+//        QStringListModel* stringListModel = qobject_cast<QStringListModel*>(model);
+//        if(stringListModel) {
+//            stringListModel->setStringList(list);
+//        }
+//    }
 }
 
 

@@ -23,7 +23,6 @@ QList<QString> listFolders(const QString& path)
         }
     }
     qDebug() << folderNames;
-    qDebug() << "folderNames";
     return folderNames;
 }
 

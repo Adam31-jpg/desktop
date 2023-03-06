@@ -8,12 +8,9 @@
 QList<QString> listFolders(const QString& path)
 {
     QDir dir(path);
-
     QList<QString> folderNames;
-
     // Récupération de la liste de tous les fichiers et répertoires dans le répertoire courant
     QFileInfoList entries = dir.entryInfoList(QDir::AllEntries | QDir::NoDotAndDotDot);
-
     // Parcours de chaque fichier ou répertoire
     foreach(QFileInfo entry, entries)
     {
@@ -25,7 +22,6 @@ QList<QString> listFolders(const QString& path)
 //            folderNames.append(subFolderNames);
         }
     }
-
     qDebug() << folderNames;
     return folderNames;
 }

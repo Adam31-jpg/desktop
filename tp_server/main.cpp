@@ -5,7 +5,7 @@
 #include <QTcpSocket>
 #include <QDataStream>
 
-QList<QString> listFolders(const QString& path)
+QList<QString> listFolders(const QString& path, int level = 1)
 {
     QDir dir(path);
 
@@ -20,15 +20,17 @@ QList<QString> listFolders(const QString& path)
         if (entry.isDir()) {
             // S'il s'agit d'un répertoire, on l'ajoute à la liste
             folderNames << entry.absoluteFilePath();
-            // On appelle récursivement la fonction pour explorer les sous-répertoires
-//            QList<QString> subFolderNames = listFolders(entry.absoluteFilePath());
-//            folderNames.append(subFolderNames);
+            if (level > 1) {
+                // Si le niveau de recherche est supérieur à 1, on appelle récursivement la fonction pour explorer les sous-répertoires
+                QList<QString> subFolderNames = listFolders(entry.absoluteFilePath(), level - 1);
+                folderNames.append(subFolderNames);
+            }
         }
     }
 
-    qDebug() << folderNames;
     return folderNames;
 }
+
 
 void handleNewConnection(QTcpServer* server)
 {

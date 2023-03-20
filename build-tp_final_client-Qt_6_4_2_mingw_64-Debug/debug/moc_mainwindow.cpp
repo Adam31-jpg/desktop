@@ -28,16 +28,24 @@ namespace {
 struct qt_meta_stringdata_MainWindow_t {
     uint offsetsAndSizes[10];
     char stringdata0[11];
+<<<<<<< HEAD
     char stringdata1[18];
     char stringdata2[1];
     char stringdata3[24];
     char stringdata4[5];
+=======
+    char stringdata1[24];
+    char stringdata2[1];
+    char stringdata3[5];
+    char stringdata4[18];
+>>>>>>> 233175efc66a6d879cd180979142f466a9b9f9ba
 };
 #define QT_MOC_LITERAL(ofs, len) \
     uint(sizeof(qt_meta_stringdata_MainWindow_t::offsetsAndSizes) + ofs), len 
 Q_CONSTINIT static const qt_meta_stringdata_MainWindow_t qt_meta_stringdata_MainWindow = {
     {
         QT_MOC_LITERAL(0, 10),  // "MainWindow"
+<<<<<<< HEAD
         QT_MOC_LITERAL(11, 17),  // "on_btnTxt_clicked"
         QT_MOC_LITERAL(29, 0),  // ""
         QT_MOC_LITERAL(30, 23),  // "on_lineEdit_textChanged"
@@ -48,6 +56,18 @@ Q_CONSTINIT static const qt_meta_stringdata_MainWindow_t qt_meta_stringdata_Main
     "",
     "on_lineEdit_textChanged",
     "text"
+=======
+        QT_MOC_LITERAL(11, 23),  // "on_lineEdit_textChanged"
+        QT_MOC_LITERAL(35, 0),  // ""
+        QT_MOC_LITERAL(36, 4),  // "text"
+        QT_MOC_LITERAL(41, 17)   // "on_btnTxt_clicked"
+    },
+    "MainWindow",
+    "on_lineEdit_textChanged",
+    "",
+    "text",
+    "on_btnTxt_clicked"
+>>>>>>> 233175efc66a6d879cd180979142f466a9b9f9ba
 };
 #undef QT_MOC_LITERAL
 } // unnamed namespace
@@ -66,12 +86,21 @@ Q_CONSTINIT static const uint qt_meta_data_MainWindow[] = {
        0,       // signalCount
 
  // slots: name, argc, parameters, tag, flags, initial metatype offsets
+<<<<<<< HEAD
        1,    0,   26,    2, 0x08,    1 /* Private */,
        3,    1,   27,    2, 0x08,    2 /* Private */,
 
  // slots: parameters
     QMetaType::Void,
     QMetaType::Void, QMetaType::QString,    4,
+=======
+       1,    1,   26,    2, 0x0a,    1 /* Public */,
+       4,    0,   29,    2, 0x08,    3 /* Private */,
+
+ // slots: parameters
+    QMetaType::Void, QMetaType::QString,    3,
+    QMetaType::Void,
+>>>>>>> 233175efc66a6d879cd180979142f466a9b9f9ba
 
        0        // eod
 };
@@ -85,11 +114,19 @@ Q_CONSTINIT const QMetaObject MainWindow::staticMetaObject = { {
     qt_incomplete_metaTypeArray<qt_meta_stringdata_MainWindow_t,
         // Q_OBJECT / Q_GADGET
         QtPrivate::TypeAndForceComplete<MainWindow, std::true_type>,
+<<<<<<< HEAD
         // method 'on_btnTxt_clicked'
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
         // method 'on_lineEdit_textChanged'
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
         QtPrivate::TypeAndForceComplete<const QString &, std::false_type>
+=======
+        // method 'on_lineEdit_textChanged'
+        QtPrivate::TypeAndForceComplete<void, std::false_type>,
+        QtPrivate::TypeAndForceComplete<const QString &, std::false_type>,
+        // method 'on_btnTxt_clicked'
+        QtPrivate::TypeAndForceComplete<void, std::false_type>
+>>>>>>> 233175efc66a6d879cd180979142f466a9b9f9ba
     >,
     nullptr
 } };
@@ -100,8 +137,13 @@ void MainWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
         auto *_t = static_cast<MainWindow *>(_o);
         (void)_t;
         switch (_id) {
+<<<<<<< HEAD
         case 0: _t->on_btnTxt_clicked(); break;
         case 1: _t->on_lineEdit_textChanged((*reinterpret_cast< std::add_pointer_t<QString>>(_a[1]))); break;
+=======
+        case 0: _t->on_lineEdit_textChanged((*reinterpret_cast< std::add_pointer_t<QString>>(_a[1]))); break;
+        case 1: _t->on_btnTxt_clicked(); break;
+>>>>>>> 233175efc66a6d879cd180979142f466a9b9f9ba
         default: ;
         }
     }

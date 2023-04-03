@@ -4,32 +4,8 @@
 #include <QTcpServer>
 #include <QTcpSocket>
 #include <QDataStream>
-
-QList<QString> listFolders(const QString& path, int level = 1)
-{
-    QDir dir(path);
-
-    QList<QString> folderNames;
-
-    // Récupération de la liste de tous les fichiers et répertoires dans le répertoire courant
-    QFileInfoList entries = dir.entryInfoList(QDir::AllEntries | QDir::NoDotAndDotDot);
-
-    // Parcours de chaque fichier ou répertoire
-    foreach(QFileInfo entry, entries)
-    {
-        if (entry.isDir()) {
-            // S'il s'agit d'un répertoire, on l'ajoute à la liste
-            folderNames << entry.absoluteFilePath();
-            if (level > 1) {
-                // Si le niveau de recherche est supérieur à 1, on appelle récursivement la fonction pour explorer les sous-répertoires
-                QList<QString> subFolderNames = listFolders(entry.absoluteFilePath(), level - 1);
-                folderNames.append(subFolderNames);
-            }
-        }
-    }
-
-    return folderNames;
-}
+#include "SqlDatabase.h"
+#include "listpath.h"
 
 
 void handleNewConnection(QTcpServer* server)
@@ -42,7 +18,7 @@ void handleNewConnection(QTcpServer* server)
         QByteArray block;
         QDataStream out(&block, QIODevice::WriteOnly);
 
-        QList<QString> folderNames = listFolders("c:/");
+        QList<QString> folderNames = listFileInfo("c:/users/florian/code/devops");
         out << folderNames;
 
         // Envoi de la liste des noms de dossiers au client
@@ -61,6 +37,8 @@ void handleNewConnection(QTcpServer* server)
 int main(int argc, char *argv[])
 {
     QCoreApplication a(argc, argv);
+
+    SqlConnexion();
 
     QTcpServer server;
 

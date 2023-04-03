@@ -7,11 +7,7 @@
 
 void SqlConnexion()
 {
-    QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
-    if(db.lastError().isValid()) {
-        qCritical() << "addDatabase" << db.lastError().text();
-        return;
-    }
+    QSqlDatabase::removeDatabase("qt_sql_default_connection");
 
     QString appDataLocation = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
 
@@ -23,9 +19,17 @@ void SqlConnexion()
 
     QString dbPath = appDataLocation+"/desktop.db";
     qDebug() << "dbPath" << dbPath;
+
+    QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
     db.setDatabaseName(dbPath);
-    if(!db.open()) {
-        qCritical() << "Unable to open db" << db.lastError().text() << dbPath;
+
+    if (!db.open()) {
+        qDebug() << "Failed to open database";
+        return;
+    }
+
+    if(db.lastError().isValid()) {
+        qCritical() << "addDatabase" << db.lastError().text();
         return;
     }
 
@@ -45,18 +49,4 @@ void SqlConnexion()
         qWarning() << "CREATE TABLE" << query.lastError().text();
         return;
     }
-
-    const int INSERTS_COUNT=10;
-    for(int i=0; i<= INSERTS_COUNT; i++) {
-        QString sqlInsert = QString("INSERT INTO path (filePath, fileSize, fileLastModif, fileCreated, fileExtension) "
-                                    "VALUES('file%1', %2, %3, %4, 'file%5')")
-                                    .arg(i).arg(i).arg(i).arg(i).arg(i);
-        query.exec(sqlInsert);
-
-        if(query.lastError().isValid()) {
-            qWarning() << "INSERT PATH" << query.lastError().text();
-            return;
-        }
-    }
 }
-

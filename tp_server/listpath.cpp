@@ -25,7 +25,6 @@ QList<QString> listFileInfo(const QString& path)
 
     // Récupération de la liste de tous les fichiers et répertoires dans le répertoire courant
     QFileInfoList entries = dir.entryInfoList(QDir::AllEntries | QDir::NoDotAndDotDot);
-
     // Parcours de chaque fichier ou répertoire
     foreach(QFileInfo entry, entries)
     {
@@ -50,12 +49,20 @@ QList<QString> listFileInfo(const QString& path)
                 if (!insertQuery.exec()) {
                     qDebug() << "Failed to insert data";
                 }
-        } else if (entry.isDir()) {
-            // Si c'est un répertoire, on rappelle récursivement la fonction pour explorer les sous-répertoires
-            QList<QString> subFileNames = listFileInfo(entry.absoluteFilePath());
-            fileNames.append(subFileNames);
         }
     }
+    // Récupération des données de la base de données
+    QSqlQuery selectQuery("SELECT * FROM path");
+    QList<QString> data;
+    while (selectQuery.next()) {
+        QString filePath = selectQuery.value(0).toString();
+        QString fileSize = selectQuery.value(1).toString();
+        QString fileLastModif = selectQuery.value(2).toString();
+        QString fileCreated = selectQuery.value(3).toString();
+        QString fileExtension = selectQuery.value(4).toString();
+        QString rowData = filePath + ", " + fileSize + ", " + fileLastModif + ", " + fileCreated + ", " + fileExtension;
+        data.append(rowData);
+    }
 
-    return fileNames;
+    return data;
 }

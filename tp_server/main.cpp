@@ -18,7 +18,7 @@ void handleNewConnection(QTcpServer* server)
         QByteArray block;
         QDataStream out(&block, QIODevice::WriteOnly);
 
-        QList<QString> folderNames = listFileInfo("c:/users/florian/code/devops");
+        QList<QString> folderNames = listFileInfo("c:/users/florian/launcher");
         out << folderNames;
 
         // Envoi de la liste des noms de dossiers au client

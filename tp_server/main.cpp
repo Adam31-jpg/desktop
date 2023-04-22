@@ -8,31 +8,7 @@
 #include "listpath.h"
 #include <QString>
 #include <QDateTime>
-//void handleNewConnection(QTcpServer* server)
-//{
-//    while (server->hasPendingConnections())
-//    {
-//        QTcpSocket* client = server->nextPendingConnection();
-//        qDebug() << "New client connected";
 
-//        QByteArray block;
-//        QDataStream out(&block, QIODevice::WriteOnly);
-
-//        QList<QString> folderNames = listFileInfo("c:/users/florian/launcher");
-//        out << folderNames;
-
-//        // Envoi de la liste des noms de dossiers au client
-//        client->write(block);
-
-//        // Attente de la confirmation de la réception des données
-//        if (!client->waitForBytesWritten()) {
-//            qDebug() << "Error sending data to client";
-//        }
-
-////            client->disconnectFromHost();
-////            client->deleteLater();
-//    }
-//}
 void handleNewConnection(QTcpServer* server)
 {
     while (server->hasPendingConnections())

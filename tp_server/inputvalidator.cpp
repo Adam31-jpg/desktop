@@ -31,21 +31,21 @@ bool validateFileType(const QString& fileType, const QString& fileExtension) {
 // Vérifie la validité de l'extension de fichier
 bool validateFileExtension(const QString& fileExtension) {
     // Code de validation d'extension de fichier
-    return fileExtension == ".sh" || fileExtension == ".jar" || fileExtension == ".txt" ||
-           fileExtension == ".png" || fileExtension == ".jpg" || fileExtension == ".pdf" ||
-           fileExtension == ".doc" || fileExtension == ".docx" || fileExtension == ".xls" ||
-           fileExtension == ".xlsx" || fileExtension == ".ppt" || fileExtension == ".pptx" ||
-           fileExtension == ".mp3" || fileExtension == ".mp4" || fileExtension == ".avi" ||
-           fileExtension == ".mov" || fileExtension == ".wmv" || fileExtension == ".gif" ||
-           fileExtension == ".bmp" || fileExtension == ".tif" || fileExtension == ".zip" ||
-           fileExtension == ".rar" || fileExtension == ".7z" || fileExtension == ".tar" || fileExtension == ".gz";
+    return fileExtension == "sh" || fileExtension == "jar" || fileExtension == "txt" ||
+           fileExtension == "png" || fileExtension == "jpg" || fileExtension == "pdf" ||
+           fileExtension == "doc" || fileExtension == "docx" || fileExtension == "xls" ||
+           fileExtension == "xlsx" || fileExtension == "ppt" || fileExtension == "pptx" ||
+           fileExtension == "mp3" || fileExtension == "mp4" || fileExtension == "avi" ||
+           fileExtension == "mov" || fileExtension == "wmv" || fileExtension == "gif" ||
+           fileExtension == "bmp" || fileExtension == "tif" || fileExtension == "zip" ||
+           fileExtension == "rar" || fileExtension == "7z" || fileExtension == "tar" || fileExtension == "gz";
 }
 
 
 bool validateDate(const QString& minDate, const QString& maxDate) {
     // Vérifie la validité des dates
-    QDateTime minDateTime = QDateTime::fromString(minDate, "yyyy-MM-dd");
-    QDateTime maxDateTime = QDateTime::fromString(maxDate, "yyyy-MM-dd");
+    QDateTime minDateTime = QDateTime::fromString(minDate, "dd/MM/yyyy");
+    QDateTime maxDateTime = QDateTime::fromString(maxDate, "dd/MM/yyyy");
     if (!minDateTime.isValid() || !maxDateTime.isValid()) {
         return false;
     }

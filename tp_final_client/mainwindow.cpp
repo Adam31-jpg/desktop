@@ -62,16 +62,16 @@ void MainWindow::on_btnTxt_clicked()
        SendThread *sendThread = new SendThread(this);
        sendThread->setData(data);
        sendThread->start();
-    QStringList list;
+//    QStringList list;
 
-//    // Obtenir la référence de la QListView
-    QListView* listView = ui->listView;
+////    // Obtenir la référence de la QListView
+//    QListView* listView = ui->listView;
 
-//    // Créer un modèle pour la liste
-    QStringListModel* model = new QStringListModel(list, this);
+////    // Créer un modèle pour la liste
+//    QStringListModel* model = new QStringListModel(list, this);
 
-//    // Affecter le modèle à la QListView
-    listView->setModel(model);
+////    // Affecter le modèle à la QListView
+//    listView->setModel(model);
 
 }
 

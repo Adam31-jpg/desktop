@@ -9,7 +9,8 @@ enum class State {
     FileName,
     FileType,
     FileExtension,
-    Date,
+    MinDate,
+    MaxDate,
     MinFileSize,
     MaxFileSize,
     Error
@@ -21,7 +22,8 @@ enum class TokenType {
     FileName,       // Nom de fichier
     FileType,       // Type de fichier (image, texte, exécutable)
     FileExtension,  // Extension de fichier (.txt, .sh, etc.)
-    Date,           // Date de création du fichier
+    MinDate,        // Date de création du fichier
+    MaxDate,
     MinFileSize,    // Taille minimale du fichier
     MaxFileSize     // Taille maximale du fichier
 };

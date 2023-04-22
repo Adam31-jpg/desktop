@@ -3,7 +3,7 @@
 
 #include <QString>
 #include <QList>
-#include "lexer.h"
+#include "Lexer.h"
 
 class InputValidator
 {
@@ -14,13 +14,13 @@ public:
     static bool validateFileName(const QString& fileName);
 
     // Vérifie la validité du type de fichier
-    static bool validateFileType(const QString& fileType);
+    static bool validateFileType(const QString& fileType, const QString& fileExtension);
 
     // Vérifie la validité de l'extension de fichier
     static bool validateFileExtension(const QString& fileExtension);
 
     // Vérifie la validité de la date
-    static bool validateDate(const QString& date);
+    static bool validateDate(const QString& minDate, const QString& maxDate);
 
     // Vérifie la validité de la taille minimale de fichier
     static bool validateMinFileSize(qint64 minFileSize);

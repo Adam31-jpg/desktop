@@ -10,7 +10,7 @@ enum class TokenType {
     FileName, // File name
     FileType, // File type (image, text, executable)
     FileExtension, // File extension (.txt, .sh, etc.)
-    Date, // File creation date
+    Date,   // File creation date
     MinFileSize, // Minimum file size
     MaxFileSize // Maximum file size
 };

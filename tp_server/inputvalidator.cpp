@@ -80,7 +80,10 @@ bool validateInput(const QList<Token>& tokens) {
             case TokenType::FileExtension:
                 isValid = isValid && validateFileExtension(token.value);
                 break;
-            case TokenType::Date:
+            case TokenType::MinDate:
+                isValid = isValid && validateDate(token.value, token.value);
+                break;
+            case TokenType::MaxDate:
                 isValid = isValid && validateDate(token.value, token.value);
                 break;
             case TokenType::MinFileSize:

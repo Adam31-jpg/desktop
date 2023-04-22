@@ -8,6 +8,7 @@
 #include "listpath.h"
 #include <QString>
 #include <QDateTime>
+#include "lexer.h"
 
 void handleNewConnection(QTcpServer* server)
 {
@@ -26,35 +27,41 @@ void handleNewConnection(QTcpServer* server)
         client->write(block);
 
         // Attente de la réception des données
-            if (client->waitForReadyRead()) {
+        if (client->waitForReadyRead()) {
 
-                // Lecture des données envoyées par le client
-                QByteArray receivedData = client->readAll();
+            // Lecture des données envoyées par le client
+            QByteArray receivedData = client->readAll();
 
-                // Conversion des données reçues en une chaîne de caractères
-                QDataStream in(&receivedData, QIODevice::ReadOnly);
+            // Conversion des données reçues en une chaîne de caractères
+            QDataStream in(&receivedData, QIODevice::ReadOnly);
 
-                // Extraction des données à partir de QDataStream
-                QString nom_du_fichier;
-                QString type_du_fichier;
-                QString extention_du_fichier;
-                qint64 minSize, maxSize;
-                QString minDate, maxDate;
-                in >> nom_du_fichier >> type_du_fichier >> extention_du_fichier >> minSize >> maxSize >> minDate >> maxDate;
+            // Extraction des données à partir de QDataStream
+            QString nom_du_fichier;
+            QString type_du_fichier;
+            QString extention_du_fichier;
+            qint64 minSize, maxSize;
+            QString minDate, maxDate;
+            in >> nom_du_fichier >> type_du_fichier >> extention_du_fichier >> minSize >> maxSize >> minDate >> maxDate;
 
+            QString input = "filename:\"" + nom_du_fichier + "\" type:" + type_du_fichier
+                    + " extension:" + extention_du_fichier + " minsize:" + QString::number(minSize)
+                    + " maxsize:" + QString::number(maxSize) + " date:" + minDate + "-" + maxDate;
 
-                // Utilisation des données extraites
-                qDebug() << "Nom du fichier: " << nom_du_fichier;
-                qDebug() << "Type du fichier: " << type_du_fichier;
-                qDebug() << "Extension du fichier: " << extention_du_fichier;
-                qDebug() << "Taille minimale: " << minSize;
-                qDebug() << "Taille maximale: " << maxSize;
-                qDebug() << "Date minimale: " << minDate;
-                qDebug() << "Date maximale: " << maxDate;
+            qDebug() << "input" << input;
+
+            Lexer lexer(input);
+            QVector<Token> tokens = lexer.tokenize();
+
+            for (const Token& token : tokens) {
+                qDebug() << "Token name:" << token.value;
             }
-            else {
-                qDebug() << "Error waiting for data from client";
-            }
+            //C'est ici que j'ai recu les données du client
+            // Utilisation des données extraites
+
+        }
+        else {
+            qDebug() << "Error waiting for data from client";
+        }
     }
 }
 

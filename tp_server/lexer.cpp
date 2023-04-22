@@ -9,10 +9,11 @@ QVector<Token> Lexer::tokenize() {
     QVector<Token> tokens;
 
     // Regular expressions to extract each type of token
-    QRegularExpression fileNameRegex("\"([^\"]+)\"");
-    QRegularExpression fileTypeRegex("type:(\\S+)");
+    QRegularExpression fileNameRegex("filename:\"([^\"]+)\"");
+    QRegularExpression fileTypeRegex("type:(\\S+(?:\\s+\\S+)*)");
     QRegularExpression fileExtensionRegex("extension:(\\S+)");
-    QRegularExpression dateRegex("date:(\\S+)");
+    QRegularExpression mindateRegex("date:(\\S+-)");
+    QRegularExpression maxdateRegex("date:(-\\S+)");
     QRegularExpression minFileSizeRegex("minsize:(\\d+)");
     QRegularExpression maxFileSizeRegex("maxsize:(\\d+)");
 
@@ -24,10 +25,10 @@ QVector<Token> Lexer::tokenize() {
         // minimum file size, maximum file size
         bool found = false;
         for (const auto& regex : {fileNameRegex, fileTypeRegex, fileExtensionRegex,
-                                  dateRegex, minFileSizeRegex, maxFileSizeRegex}) {
+                                  mindateRegex,maxdateRegex, minFileSizeRegex, maxFileSizeRegex}) {
             QRegularExpressionMatch match = regex.match(input, pos);
             if (!match.hasMatch()) {
-                qDebug() << "Invalid input at position" << pos;
+                qDebug() << "Invalid input at position" << pos <<"for this input" <<input;
                 return {};
             }
             int matchPos = match.capturedStart();
@@ -40,8 +41,10 @@ QVector<Token> Lexer::tokenize() {
                     type = TokenType::FileType;
                 } else if (&regex == &fileExtensionRegex) {
                     type = TokenType::FileExtension;
-                } else if (&regex == &dateRegex) {
-                    type = TokenType::Date;
+                } else if (&regex == &mindateRegex) {
+                    type = TokenType::MinDate;
+                } else if (&regex == &maxdateRegex) {
+                    type = TokenType::MaxDate;
                 } else if (&regex == &minFileSizeRegex) {
                     type = TokenType::MinFileSize;
                 } else if (&regex == &maxFileSizeRegex) {
@@ -49,6 +52,7 @@ QVector<Token> Lexer::tokenize() {
                 } else {
                     type = TokenType::Invalid;
                 }
+
                 tokens.append(Token(type, match.capturedTexts()[1]));
                 pos = matchPos + match.capturedLength();
                 found = true;

@@ -3,6 +3,8 @@
 
 #include <QString>
 #include <QVector>
+#include <QDebug>
+
 
 // The different possible token types
 enum class TokenType {
@@ -10,7 +12,8 @@ enum class TokenType {
     FileName, // File name
     FileType, // File type (image, text, executable)
     FileExtension, // File extension (.txt, .sh, etc.)
-    Date,   // File creation date
+    MinDate,
+    MaxDate,
     MinFileSize, // Minimum file size
     MaxFileSize // Maximum file size
 };

@@ -10,10 +10,10 @@ QVector<Token> Lexer::tokenize() {
 
     // Regular expressions to extract each type of token
     QRegularExpression fileNameRegex("filename:\"([^\"]+)\"");
-    QRegularExpression fileTypeRegex("type:(\\S+(?:\\s+\\S+)*)");
+    QRegularExpression fileTypeRegex("type:(\\S+)");
     QRegularExpression fileExtensionRegex("extension:(\\S+)");
-    QRegularExpression mindateRegex("date:(\\S+-)");
-    QRegularExpression maxdateRegex("date:(-\\S+)");
+    QRegularExpression minDateRegex("mindate:(\\d{2}/\\d{2}/\\d{4})");
+    QRegularExpression maxDateRegex("maxdate:(\\d{2}/\\d{2}/\\d{4})");
     QRegularExpression minFileSizeRegex("minsize:(\\d+)");
     QRegularExpression maxFileSizeRegex("maxsize:(\\d+)");
 
@@ -25,7 +25,7 @@ QVector<Token> Lexer::tokenize() {
         // minimum file size, maximum file size
         bool found = false;
         for (const auto& regex : {fileNameRegex, fileTypeRegex, fileExtensionRegex,
-                                  mindateRegex,maxdateRegex, minFileSizeRegex, maxFileSizeRegex}) {
+                                  minDateRegex,maxDateRegex, minFileSizeRegex, maxFileSizeRegex}) {
             QRegularExpressionMatch match = regex.match(input, pos);
             if (!match.hasMatch()) {
                 qDebug() << "Invalid input at position" << pos <<"for this input" <<input;
@@ -41,9 +41,9 @@ QVector<Token> Lexer::tokenize() {
                     type = TokenType::FileType;
                 } else if (&regex == &fileExtensionRegex) {
                     type = TokenType::FileExtension;
-                } else if (&regex == &mindateRegex) {
+                } else if (&regex == &minDateRegex) {
                     type = TokenType::MinDate;
-                } else if (&regex == &maxdateRegex) {
+                } else if (&regex == &maxDateRegex) {
                     type = TokenType::MaxDate;
                 } else if (&regex == &minFileSizeRegex) {
                     type = TokenType::MinFileSize;

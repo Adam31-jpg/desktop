@@ -1,12 +1,13 @@
-#include "mainwindow.h"
-
 #include <QApplication>
-#include <QDebug>
-#include <QDir>
-#include <QTcpServer>
+#include <QListView>
+#include <QLineEdit>
+#include <QPushButton>
+#include <QStringListModel>
 #include <QTcpSocket>
 #include <QDataStream>
+#include <QDebug>
 #include <QThread>
+#include "mainwindow.h"
 
 void waitForData(QTcpSocket* socket, MainWindow* window)
 {
@@ -23,6 +24,7 @@ void waitForData(QTcpSocket* socket, MainWindow* window)
             // Lecture de la liste des noms de dossiers envoyée par le serveur
             QList<QString> folderNames;
             in >> folderNames;
+
             // Créer un modèle pour la liste
             QStringListModel* model = new QStringListModel(window);
 
@@ -41,6 +43,7 @@ void waitForData(QTcpSocket* socket, MainWindow* window)
         else
         {
             qDebug() << "Waiting for data from server";
+
             // Ajouter un délai pour éviter un blocage infini
             QThread::msleep(100);
         }
@@ -75,7 +78,7 @@ int main(int argc, char *argv[])
     else
     {
         qDebug() << "Could not connect to server";
-       }
+    }
 
-       return a.exec();
-   }
+    return a.exec();
+}

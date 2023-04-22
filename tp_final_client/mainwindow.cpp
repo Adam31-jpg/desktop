@@ -25,10 +25,6 @@ void MainWindow::on_btnTxt_clicked()
 {
     QStringList list;
 
-//    for(int i = 0; i < 1000; i++){
-//        list.append(QString::number(i));
-//    }
-
 //    // Obtenir la référence de la QListView
     QListView* listView = ui->listView;
 
@@ -44,28 +40,28 @@ void MainWindow::on_btnTxt_clicked()
 
 void MainWindow::on_lineEdit_textChanged(const QString &text)
 {
-    // Obtenir le modèle de la QListView
-//    QAbstractItemModel* model = ui->listView->model();
+//     Obtenir le modèle de la QListView
+    QAbstractItemModel* model = ui->listView->model();
 
-//    if(model) {
-//        QStringList list;
+    if(model) {
+        QStringList list;
 
-//        // Parcourir la liste d'éléments du modèle et ajouter les éléments qui contiennent le texte filtré
-//        for(int i = 0; i < model->rowCount(); i++) {
-//            QModelIndex index = model->index(i, 0);
-//            QString itemText  = model->data(index, Qt::DisplayRole).toString();
+        // Parcourir la liste d'éléments du modèle et ajouter les éléments qui contiennent le texte filtré
+        for(int i = 0; i < model->rowCount(); i++) {
+            QModelIndex index = model->index(i, 0);
+            QString itemText  = model->data(index, Qt::DisplayRole).toString();
 
-//            if(itemText .contains(text, Qt::CaseInsensitive)) {
-//                list.append(itemText);
-//            }
-//        }
+            if(itemText .contains(text, Qt::CaseInsensitive)) {
+                list.append(itemText);
+            }
+        }
 
-//        // Mettre à jour la liste filtrée dans le modèle de la QListView
-//        QStringListModel* stringListModel = qobject_cast<QStringListModel*>(model);
-//        if(stringListModel) {
-//            stringListModel->setStringList(list);
-//        }
-//    }
+        // Mettre à jour la liste filtrée dans le modèle de la QListView
+        QStringListModel* stringListModel = qobject_cast<QStringListModel*>(model);
+        if(stringListModel) {
+            stringListModel->setStringList(list);
+        }
+    }
 }
 
 

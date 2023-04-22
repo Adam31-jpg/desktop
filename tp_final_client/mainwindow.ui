@@ -87,7 +87,11 @@
           <number>0</number>
          </property>
          <item>
-          <widget class="QSpinBox" name="minSize"/>
+          <widget class="QSpinBox" name="minSize">
+           <property name="maximum">
+            <number>2147483647</number>
+           </property>
+          </widget>
          </item>
          <item>
           <widget class="QLabel" name="label">

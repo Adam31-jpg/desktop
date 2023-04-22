@@ -3,7 +3,7 @@
 
 #include <QString>
 #include <QList>
-#include "Token.h"
+#include "lexer.h"
 
 class InputValidator
 {

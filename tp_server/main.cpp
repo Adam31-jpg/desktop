@@ -8,6 +8,31 @@
 #include "listpath.h"
 
 
+//void handleNewConnection(QTcpServer* server)
+//{
+//    while (server->hasPendingConnections())
+//    {
+//        QTcpSocket* client = server->nextPendingConnection();
+//        qDebug() << "New client connected";
+
+//        QByteArray block;
+//        QDataStream out(&block, QIODevice::WriteOnly);
+
+//        QList<QString> folderNames = listFileInfo("c:/users/florian/launcher");
+//        out << folderNames;
+
+//        // Envoi de la liste des noms de dossiers au client
+//        client->write(block);
+
+//        // Attente de la confirmation de la réception des données
+//        if (!client->waitForBytesWritten()) {
+//            qDebug() << "Error sending data to client";
+//        }
+
+////            client->disconnectFromHost();
+////            client->deleteLater();
+//    }
+//}
 void handleNewConnection(QTcpServer* server)
 {
     while (server->hasPendingConnections())
@@ -24,13 +49,35 @@ void handleNewConnection(QTcpServer* server)
         // Envoi de la liste des noms de dossiers au client
         client->write(block);
 
-        // Attente de la confirmation de la réception des données
-        if (!client->waitForBytesWritten()) {
-            qDebug() << "Error sending data to client";
-        }
+        // Attente de la réception des données
+            if (client->waitForReadyRead()) {
 
-//            client->disconnectFromHost();
-//            client->deleteLater();
+                // Lecture des données envoyées par le client
+                QByteArray receivedData = client->readAll();
+
+                // Conversion des données reçues en une chaîne de caractères
+                QDataStream in(&receivedData, QIODevice::ReadOnly);
+
+                // Extraction des données à partir de QDataStream
+                QString nom_du_fichier;
+                QString type_du_fichier;
+                QString extention_du_fichier;
+                qint64 minSize, maxSize;
+                QDateTime minDate, maxDate;
+                in >> nom_du_fichier >> type_du_fichier >> extention_du_fichier >> minSize >> maxSize >> minDate >> maxDate;
+
+                // Utilisation des données extraites
+                qDebug() << "Nom du fichier: " << nom_du_fichier;
+                qDebug() << "Type du fichier: " << type_du_fichier;
+                qDebug() << "Extension du fichier: " << extention_du_fichier;
+                qDebug() << "Taille minimale: " << minSize;
+                qDebug() << "Taille maximale: " << maxSize;
+                qDebug() << "Date minimale: " << minDate.toString();
+                qDebug() << "Date maximale: " << maxDate.toString();
+            }
+            else {
+                qDebug() << "Error waiting for data from client";
+            }
     }
 }
 

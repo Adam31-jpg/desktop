@@ -10,6 +10,9 @@ CONFIG -= app_bundle
 
 SOURCES += \
         SqlDatabase.cpp \
+        fsm.cpp \
+        inputvalidator.cpp \
+        lexer.cpp \
         listpath.cpp \
         main.cpp
 
@@ -20,4 +23,7 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 HEADERS += \
     SqlDatabase.h \
+    fsm.h \
+    inputvalidator.h \
+    lexer.h \
     listpath.h

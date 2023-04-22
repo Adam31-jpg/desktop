@@ -1,0 +1,38 @@
+#ifndef FSM_H
+#define FSM_H
+
+#include <QList>
+
+// Les différents états possibles de la FSM
+enum class State {
+    Initial,
+    FileName,
+    FileType,
+    FileExtension,
+    Date,
+    MinFileSize,
+    MaxFileSize,
+    Error
+};
+
+// Les différents types de jetons possibles
+enum class TokenType {
+    Invalid,        // Jeton invalide
+    FileName,       // Nom de fichier
+    FileType,       // Type de fichier (image, texte, exécutable)
+    FileExtension,  // Extension de fichier (.txt, .sh, etc.)
+    Date,           // Date de création du fichier
+    MinFileSize,    // Taille minimale du fichier
+    MaxFileSize     // Taille maximale du fichier
+};
+
+// Un jeton est composé d'un type et d'une valeur
+struct Token {
+    TokenType type;
+    QString value;
+};
+
+// Fonction qui effectue l'analyse syntaxique d'une liste de jetons et renvoie vrai si l'entrée est valide
+bool parseInput(const QList<Token>& tokens);
+
+#endif // FSM_H

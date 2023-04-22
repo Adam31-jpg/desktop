@@ -1,6 +1,11 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include <QStringListModel>
+#include <QTcpSocket>
+#include <QDateTime>
+#include <QString>
+#include <QDebug>
+#include <QComboBox>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -9,7 +14,11 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
     connect(ui->searchTxt, SIGNAL(textChanged(QString)), this, SLOT(on_lineEdit_textChanged(QString)));
     connect(ui->btnTxt, &QPushButton::clicked, this, &MainWindow::on_btnTxt_clicked);
-
+    QComboBox *myComboBox = findChild<QComboBox*>("type");
+    if (myComboBox) {
+        QStringList items = {"image", "text", "exec"};
+        myComboBox->addItems(items);
+    }
 }
 
 MainWindow::~MainWindow()
@@ -21,8 +30,38 @@ void MainWindow::setListModel(QStringListModel* model)
 {
     ui->listView->setModel(model);
 }
+
 void MainWindow::on_btnTxt_clicked()
 {
+
+    //récuperer les résultat du formulaire
+    QString nom_du_fichier = ui->searchTxt->text();
+    QString type_du_fichier = ui->type->currentText();
+    QString extention_du_fichier = ui->extention->text();
+    QString minSize = ui->minSize->text();
+    QString maxSize = ui->maxSize->text();
+    QString minDate = ui->minDate-> text();
+    QString maxDate = ui->maxDate->text();
+
+    qint64 minSizeInt = minSize.toLongLong();
+    qint64 maxSizeInt = maxSize.toLongLong();
+
+    qDebug() << "Nom du fichier : " << nom_du_fichier;
+    qDebug() << "Type du fichier : " << type_du_fichier;
+    qDebug() << "Extension du fichier : " << extention_du_fichier;
+    qDebug() << "Taille minimale : " << minSizeInt;
+    qDebug() << "Taille maximale : " << maxSizeInt;
+    qDebug() << "Date minimale : " << minDate;
+    qDebug() << "Date maximale : " << maxDate;
+
+    QByteArray data;
+       QDataStream out(&data, QIODevice::WriteOnly);
+       out << nom_du_fichier << type_du_fichier << extention_du_fichier << minSizeInt << maxSizeInt << minDate << maxDate;
+
+       // Créer un thread pour envoyer les données
+       SendThread *sendThread = new SendThread(this);
+       sendThread->setData(data);
+       sendThread->start();
     QStringList list;
 
 //    // Obtenir la référence de la QListView
@@ -34,35 +73,6 @@ void MainWindow::on_btnTxt_clicked()
 //    // Affecter le modèle à la QListView
     listView->setModel(model);
 
-//    // Connecter le signal textChanged() du QLineEdit à la fonction on_lineEdit_textChanged()
-    connect(ui->searchTxt, &QLineEdit::textChanged, this, &MainWindow::on_lineEdit_textChanged);
 }
-
-void MainWindow::on_lineEdit_textChanged(const QString &text)
-{
-//     Obtenir le modèle de la QListView
-    QAbstractItemModel* model = ui->listView->model();
-
-    if(model) {
-        QStringList list;
-
-        // Parcourir la liste d'éléments du modèle et ajouter les éléments qui contiennent le texte filtré
-        for(int i = 0; i < model->rowCount(); i++) {
-            QModelIndex index = model->index(i, 0);
-            QString itemText  = model->data(index, Qt::DisplayRole).toString();
-
-            if(itemText .contains(text, Qt::CaseInsensitive)) {
-                list.append(itemText);
-            }
-        }
-
-        // Mettre à jour la liste filtrée dans le modèle de la QListView
-        QStringListModel* stringListModel = qobject_cast<QStringListModel*>(model);
-        if(stringListModel) {
-            stringListModel->setStringList(list);
-        }
-    }
-}
-
 
 

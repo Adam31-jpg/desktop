@@ -50,8 +50,7 @@ void waitForData(QTcpSocket* socket, MainWindow* window)
     }
 
     qDebug() << "Disconnected from server";
-    socket->disconnectFromHost();
-    socket->waitForDisconnected();
+
 }
 
 int main(int argc, char *argv[])

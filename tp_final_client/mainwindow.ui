@@ -67,9 +67,15 @@
           </widget>
          </item>
          <item>
-          <widget class="QComboBox" name="extention">
-           <property name="toolTip">
-            <string>Extention du fichier</string>
+          <widget class="QLineEdit" name="extention">
+           <property name="maximumSize">
+            <size>
+             <width>100</width>
+             <height>16777215</height>
+            </size>
+           </property>
+           <property name="placeholderText">
+            <string>Extention</string>
            </property>
           </widget>
          </item>
@@ -81,7 +87,11 @@
           <number>0</number>
          </property>
          <item>
-          <widget class="QSpinBox" name="minSize"/>
+          <widget class="QSpinBox" name="minSize">
+           <property name="maximum">
+            <number>2147483647</number>
+           </property>
+          </widget>
          </item>
          <item>
           <widget class="QLabel" name="label">
@@ -160,7 +170,7 @@
      <x>0</x>
      <y>0</y>
      <width>1108</width>
-     <height>25</height>
+     <height>21</height>
     </rect>
    </property>
   </widget>

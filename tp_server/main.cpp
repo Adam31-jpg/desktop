@@ -6,8 +6,8 @@
 #include <QDataStream>
 #include "SqlDatabase.h"
 #include "listpath.h"
-
-
+#include <QString>
+#include <QDateTime>
 //void handleNewConnection(QTcpServer* server)
 //{
 //    while (server->hasPendingConnections())
@@ -66,14 +66,15 @@ void handleNewConnection(QTcpServer* server)
                 QDateTime minDate, maxDate;
                 in >> nom_du_fichier >> type_du_fichier >> extention_du_fichier >> minSize >> maxSize >> minDate >> maxDate;
 
+
                 // Utilisation des données extraites
                 qDebug() << "Nom du fichier: " << nom_du_fichier;
                 qDebug() << "Type du fichier: " << type_du_fichier;
                 qDebug() << "Extension du fichier: " << extention_du_fichier;
                 qDebug() << "Taille minimale: " << minSize;
                 qDebug() << "Taille maximale: " << maxSize;
-                qDebug() << "Date minimale: " << minDate.toString();
-                qDebug() << "Date maximale: " << maxDate.toString();
+                qDebug() << "Date minimale: " << minDate.toString("dd/MM/yyyy");
+                qDebug() << "Date maximale: " << maxDate.toString("yyyy/MM/dd");
             }
             else {
                 qDebug() << "Error waiting for data from client";

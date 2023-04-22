@@ -39,53 +39,20 @@ void MainWindow::on_btnTxt_clicked()
     QString minDate = ui->minDate-> text();
     QString maxDate = ui->maxDate->text();
 
-    QDateTime minDateTime = QDateTime::fromString(minDate, "yyyy/MM/dd");
-    QDateTime maxDateTime = QDateTime::fromString(maxDate, "yyyy/MM/dd");
+    qint64 minSizeInt = minSize.toLongLong();
+    qint64 maxSizeInt = maxSize.toLongLong();
 
-    if (minDateTime.isValid()) {
-        // La date n'est pas valide, faites quelque chose pour gérer cette erreur.
-        qDebug() << 'non';
-    }
     qDebug() << "Nom du fichier : " << nom_du_fichier;
     qDebug() << "Type du fichier : " << type_du_fichier;
     qDebug() << "Extension du fichier : " << extention_du_fichier;
-    qDebug() << "Taille minimale : " << minSize;
-    qDebug() << "Taille maximale : " << maxSize;
+    qDebug() << "Taille minimale : " << minSizeInt;
+    qDebug() << "Taille maximale : " << maxSizeInt;
     qDebug() << "Date minimale : " << minDate;
     qDebug() << "Date maximale : " << maxDate;
 
-    // Créer un objet QByteArray pour stocker les données
-//        QByteArray data;
-
-//        // Créer un objet QDataStream pour encoder les données dans le tableau de données
-//        QDataStream out(&data, QIODevice::WriteOnly);
-
-//        // Écrire les données dans le flux de données
-//        out << nom_du_fichier << type_du_fichier << extention_du_fichier << minSize << maxSize << minDate << maxDate;
-
-//        // Envoyer les données au serveur
-//        QTcpSocket socket;
-//        socket.connectToHost("localhost", 8080);
-//        if (socket.waitForConnected())
-//        {
-//            socket.write(data);
-//            socket.waitForBytesWritten();
-
-//            // Attendre une réponse du serveur
-//            if (socket.waitForReadyRead()) {
-//                QByteArray response = socket.readAll();
-//                qDebug() << "Réponse du serveur : " << response;
-//            }
-//        }
-//        else
-//        {
-//            qDebug() << "Failed to connect to server";
-//        }
-
     QByteArray data;
        QDataStream out(&data, QIODevice::WriteOnly);
-       out << nom_du_fichier << type_du_fichier << extention_du_fichier << minSize << maxSize << minDateTime << maxDateTime;
-
+       out << nom_du_fichier << type_du_fichier << extention_du_fichier << minSizeInt << maxSizeInt << minDate << maxDate;
 
        // Créer un thread pour envoyer les données
        SendThread *sendThread = new SendThread(this);

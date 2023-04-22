@@ -5,7 +5,7 @@
 #include <QDateTime>
 #include <QString>
 #include <QDebug>
-
+#include <QComboBox>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -14,7 +14,11 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
     connect(ui->searchTxt, SIGNAL(textChanged(QString)), this, SLOT(on_lineEdit_textChanged(QString)));
     connect(ui->btnTxt, &QPushButton::clicked, this, &MainWindow::on_btnTxt_clicked);
-
+    QComboBox *myComboBox = findChild<QComboBox*>("type");
+    if (myComboBox) {
+        QStringList items = {"image", "text", "exec"};
+        myComboBox->addItems(items);
+    }
 }
 
 MainWindow::~MainWindow()
@@ -33,7 +37,7 @@ void MainWindow::on_btnTxt_clicked()
     //récuperer les résultat du formulaire
     QString nom_du_fichier = ui->searchTxt->text();
     QString type_du_fichier = ui->type->currentText();
-    QString extention_du_fichier = ui->extention->currentText();
+    QString extention_du_fichier = ui->extention->text();
     QString minSize = ui->minSize->text();
     QString maxSize = ui->maxSize->text();
     QString minDate = ui->minDate-> text();

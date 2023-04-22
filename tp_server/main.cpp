@@ -63,7 +63,7 @@ void handleNewConnection(QTcpServer* server)
                 QString type_du_fichier;
                 QString extention_du_fichier;
                 qint64 minSize, maxSize;
-                QDateTime minDate, maxDate;
+                QString minDate, maxDate;
                 in >> nom_du_fichier >> type_du_fichier >> extention_du_fichier >> minSize >> maxSize >> minDate >> maxDate;
 
 
@@ -73,8 +73,8 @@ void handleNewConnection(QTcpServer* server)
                 qDebug() << "Extension du fichier: " << extention_du_fichier;
                 qDebug() << "Taille minimale: " << minSize;
                 qDebug() << "Taille maximale: " << maxSize;
-                qDebug() << "Date minimale: " << minDate.toString("dd/MM/yyyy");
-                qDebug() << "Date maximale: " << maxDate.toString("yyyy/MM/dd");
+                qDebug() << "Date minimale: " << minDate;
+                qDebug() << "Date maximale: " << maxDate;
             }
             else {
                 qDebug() << "Error waiting for data from client";

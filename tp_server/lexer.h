@@ -5,7 +5,6 @@
 #include <QVector>
 #include <QDebug>
 
-
 // The different possible token types
 enum class TokenType {
     Invalid, // Invalid token

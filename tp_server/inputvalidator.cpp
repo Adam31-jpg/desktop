@@ -1,4 +1,5 @@
 #include "inputvalidator.h"
+#include <QList> // ajouté pour inclure QList
 
 #include <QDateTime> // Added for QDateTime
 

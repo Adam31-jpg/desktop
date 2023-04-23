@@ -43,9 +43,8 @@ void handleNewConnection(QTcpServer* server)
             QString minDate, maxDate;
             in >> nom_du_fichier >> type_du_fichier >> extention_du_fichier >> minSize >> maxSize >> minDate >> maxDate;
 
-            QString input = "filename:\"" + nom_du_fichier + "\" type:" + type_du_fichier
-                    + " extension:" + extention_du_fichier + " minsize:" + QString::number(minSize)
-                    + " maxsize:" + QString::number(maxSize) + " mindate:" + minDate + " maxdate:" + maxDate;
+            QString input = nom_du_fichier + ";" + type_du_fichier + ";" + extention_du_fichier + ";" +
+                            QString::number(minSize) + ";" + QString::number(maxSize) + ";" + minDate + ";" + maxDate;
 
             qDebug() << "input" << input;
 

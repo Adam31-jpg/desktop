@@ -1,6 +1,7 @@
 #include "lexer.h"
 #include <QDebug>
 #include <QRegularExpression>
+#include "inputvalidator.h"
 
 
 Lexer::Lexer(const QString& input) : input(input) {}
@@ -8,64 +9,35 @@ Lexer::Lexer(const QString& input) : input(input) {}
 QVector<Token> Lexer::tokenize() {
     QVector<Token> tokens;
 
-    // Regular expressions to extract each type of token
-    QRegularExpression fileNameRegex("filename:\"([^\"]+)\"");
-    QRegularExpression fileTypeRegex("type:(\\S+)");
-    QRegularExpression fileExtensionRegex("extension:(\\S+)");
-    QRegularExpression minDateRegex("mindate:(\\d{2}/\\d{2}/\\d{4})");
-    QRegularExpression maxDateRegex("maxdate:(\\d{2}/\\d{2}/\\d{4})");
-    QRegularExpression minFileSizeRegex("minsize:(\\d+)");
-    QRegularExpression maxFileSizeRegex("maxsize:(\\d+)");
-
-    // Traverse the input string to extract the tokens
-    int pos = 0;
-    while (pos < input.size()) {
-        // Try to extract each type of token in the following order:
-        // file name, file type, file extension, date,
-        // minimum file size, maximum file size
-        bool found = false;
-        for (const auto& regex : {fileNameRegex, fileTypeRegex, fileExtensionRegex,
-                                  minDateRegex,maxDateRegex, minFileSizeRegex, maxFileSizeRegex}) {
-            QRegularExpressionMatch match = regex.match(input, pos);
-            if (!match.hasMatch()) {
-                qDebug() << "Invalid input at position" << pos <<"for this input" <<input;
-                return {};
-            }
-            int matchPos = match.capturedStart();
-
-            if (matchPos != -1) {
-                TokenType type;
-                if (&regex == &fileNameRegex) {
-                    type = TokenType::FileName;
-                } else if (&regex == &fileTypeRegex) {
-                    type = TokenType::FileType;
-                } else if (&regex == &fileExtensionRegex) {
-                    type = TokenType::FileExtension;
-                } else if (&regex == &minDateRegex) {
-                    type = TokenType::MinDate;
-                } else if (&regex == &maxDateRegex) {
-                    type = TokenType::MaxDate;
-                } else if (&regex == &minFileSizeRegex) {
-                    type = TokenType::MinFileSize;
-                } else if (&regex == &maxFileSizeRegex) {
-                    type = TokenType::MaxFileSize;
-                } else {
-                    type = TokenType::Invalid;
-                }
-
-                tokens.append(Token(type, match.capturedTexts()[1]));
-                pos = matchPos + match.capturedLength();
-                found = true;
-                break;
-            }
-        }
-        if (!found) {
-            qDebug() << "Invalid input at position" << pos;
-            return {};
-        }
+    // Regular expression to extract the information from the input string
+    QRegularExpression regex("([^;]+);([^;]+);([^;]+);(\\d+);(\\d+);(\\d{2}/\\d{2}/\\d{4});(\\d{2}/\\d{2}/\\d{4})");
+    QRegularExpressionMatch match = regex.match(input);
+    if (!match.hasMatch()) {
+        qDebug() << "Invalid input:" << input;
+        return tokens;
     }
+
+    QString FileName = match.captured(1);
+    QString FileType = match.captured(2);
+    QString FileExtension = match.captured(3);
+    qint64 MinFileSize = match.captured(4).toLongLong();
+    qint64 MaxFileSize = match.captured(5).toLongLong();
+    QString MinDate = match.captured(6);
+    QString MaxDate = match.captured(7);
+
+    // Create a token for each information extracted from the input string
+    tokens.append(Token(TokenType::FileName, FileName));
+    tokens.append(Token(TokenType::FileType, FileType));
+    tokens.append(Token(TokenType::FileExtension, FileExtension));
+    tokens.append(Token(TokenType::MinFileSize, QString::number(MinFileSize)));
+    tokens.append(Token(TokenType::MaxFileSize, QString::number(MaxFileSize)));
+    tokens.append(Token(TokenType::MinDate, MinDate));
+    tokens.append(Token(TokenType::MaxDate, MaxDate));
+
+    if (!validateInput(tokens)) {
+           qDebug() << "Invalid input:" << input;
+           return QVector<Token>();
+       }
 
     return tokens;
 }
-
-

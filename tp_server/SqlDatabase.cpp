@@ -116,6 +116,9 @@ QList<QString> ReturnSqlData(const QList<Token> &tokens){
         QString rowData = filePath + ", " + fileSize + ", " + fileLastModif + ", " + fileCreated+ ", " + fileType + ", " + fileExtension;
         data.append(rowData);
     }
+    if (data.isEmpty()) {
+        data.append("Pas de fichiers");
+    }
 
     return data;
 }

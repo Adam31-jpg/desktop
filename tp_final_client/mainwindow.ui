@@ -67,7 +67,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QLineEdit" name="extention">
+          <widget class="QLineEdit" name="extension">
            <property name="maximumSize">
             <size>
              <width>100</width>
@@ -75,7 +75,7 @@
             </size>
            </property>
            <property name="placeholderText">
-            <string>Extention</string>
+            <string>Extension</string>
            </property>
           </widget>
          </item>
@@ -104,7 +104,11 @@
           </widget>
          </item>
          <item>
-          <widget class="QSpinBox" name="maxSize"/>
+          <widget class="QSpinBox" name="maxSize">
+           <property name="maximum">
+            <number>2147483647</number>
+           </property>
+          </widget>
          </item>
          <item>
           <spacer name="horizontalSpacer">

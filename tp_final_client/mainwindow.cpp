@@ -12,7 +12,6 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    connect(ui->searchTxt, SIGNAL(textChanged(QString)), this, SLOT(on_lineEdit_textChanged(QString)));
     connect(ui->btnTxt, &QPushButton::clicked, this, &MainWindow::on_btnTxt_clicked);
     QComboBox *myComboBox = findChild<QComboBox*>("type");
     if (myComboBox) {
@@ -37,7 +36,7 @@ void MainWindow::on_btnTxt_clicked()
     //récuperer les résultat du formulaire
     QString nom_du_fichier = ui->searchTxt->text();
     QString type_du_fichier = ui->type->currentText();
-    QString extention_du_fichier = ui->extention->text();
+    QString extension_du_fichier = ui->extension->text();
     QString minSize = ui->minSize->text();
     QString maxSize = ui->maxSize->text();
     QString minDate = ui->minDate-> text();
@@ -46,33 +45,28 @@ void MainWindow::on_btnTxt_clicked()
     qint64 minSizeInt = minSize.toLongLong();
     qint64 maxSizeInt = maxSize.toLongLong();
 
-    qDebug() << "Nom du fichier : " << nom_du_fichier;
-    qDebug() << "Type du fichier : " << type_du_fichier;
-    qDebug() << "Extension du fichier : " << extention_du_fichier;
-    qDebug() << "Taille minimale : " << minSizeInt;
-    qDebug() << "Taille maximale : " << maxSizeInt;
-    qDebug() << "Date minimale : " << minDate;
-    qDebug() << "Date maximale : " << maxDate;
+            QTcpSocket socket;
+            socket.connectToHost("localhost", 8080);
+            if (!socket.waitForConnected()) {
+                qDebug() << "Error: " << socket.errorString();
+                return;
+            }
+            QByteArray data;
+            QDataStream out(&data, QIODevice::WriteOnly);
+            out << nom_du_fichier << type_du_fichier << extension_du_fichier << minSizeInt << maxSizeInt << minDate << maxDate;
+            socket.write(data);
+            socket.flush();
 
-    QByteArray data;
-       QDataStream out(&data, QIODevice::WriteOnly);
-       out << nom_du_fichier << type_du_fichier << extention_du_fichier << minSizeInt << maxSizeInt << minDate << maxDate;
-
-       // Créer un thread pour envoyer les données
-       SendThread *sendThread = new SendThread(this);
-       sendThread->setData(data);
-       sendThread->start();
-//    QStringList list;
-
-////    // Obtenir la référence de la QListView
-//    QListView* listView = ui->listView;
-
-////    // Créer un modèle pour la liste
-//    QStringListModel* model = new QStringListModel(list, this);
-
-////    // Affecter le modèle à la QListView
-//    listView->setModel(model);
-
+            // Attendre la réponse du serveur
+            if (socket.waitForReadyRead()) {
+                QByteArray receivedData = socket.readAll();
+                QDataStream in(&receivedData, QIODevice::ReadOnly);
+                QList<QString> folderNames;
+                in >> folderNames;
+                QStringListModel* model = new QStringListModel(folderNames, this);
+                ui->listView->setModel(model);
+            } else {
+                qDebug() << "Error waiting for data from server";
+            }
 }
-
 

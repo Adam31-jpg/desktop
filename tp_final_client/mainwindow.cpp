@@ -45,25 +45,28 @@ void MainWindow::on_btnTxt_clicked()
     qint64 minSizeInt = minSize.toLongLong();
     qint64 maxSizeInt = maxSize.toLongLong();
 
-    QByteArray data;
-       QDataStream out(&data, QIODevice::WriteOnly);
-       out << nom_du_fichier << type_du_fichier << extension_du_fichier << minSizeInt << maxSizeInt << minDate << maxDate;
+            QTcpSocket socket;
+            socket.connectToHost("localhost", 8080);
+            if (!socket.waitForConnected()) {
+                qDebug() << "Error: " << socket.errorString();
+                return;
+            }
+            QByteArray data;
+            QDataStream out(&data, QIODevice::WriteOnly);
+            out << nom_du_fichier << type_du_fichier << extension_du_fichier << minSizeInt << maxSizeInt << minDate << maxDate;
+            socket.write(data);
+            socket.flush();
 
-       // Créer un thread pour envoyer les données
-       SendThread *sendThread = new SendThread(this);
-       sendThread->setData(data);
-       sendThread->start();
-//    QStringList list;
-
-////    // Obtenir la référence de la QListView
-//    QListView* listView = ui->listView;
-
-////    // Créer un modèle pour la liste
-//    QStringListModel* model = new QStringListModel(list, this);
-
-////    // Affecter le modèle à la QListView
-//    listView->setModel(model);
-
+            // Attendre la réponse du serveur
+            if (socket.waitForReadyRead()) {
+                QByteArray receivedData = socket.readAll();
+                QDataStream in(&receivedData, QIODevice::ReadOnly);
+                QList<QString> folderNames;
+                in >> folderNames;
+                QStringListModel* model = new QStringListModel(folderNames, this);
+                ui->listView->setModel(model);
+            } else {
+                qDebug() << "Error waiting for data from server";
+            }
 }
-
 

@@ -11,13 +11,17 @@
 #include "lexer.h"
 #include "inputvalidator.h"
 
-
 void handleNewConnection(QTcpServer* server)
 {
     while (server->hasPendingConnections())
     {
         QTcpSocket* client = server->nextPendingConnection();
         qDebug() << "New client connected";
+
+        QByteArray block;
+        QDataStream out(&block, QIODevice::WriteOnly);
+
+        listFileInfo("c:/users/florian/launcher");
 
         // Attente de la réception des données
         if (client->waitForReadyRead()) {
@@ -42,24 +46,16 @@ void handleNewConnection(QTcpServer* server)
             Lexer lexer(input);
             QVector<Token> tokens = lexer.tokenize();
             QList<QString> folderNames = ReturnSqlData(tokens);
-
-            QByteArray block;
-            QDataStream out(&block, QIODevice::WriteOnly);
-            qDebug() << "folderNames" << folderNames;
             out << folderNames;
-            qDebug() << "out" << folderNames;
-            client->waitForBytesWritten(); // Attendre la fin de l'envoi des données
+qDebug() << "folderNames" << folderNames;
             // Envoi de la liste des noms de dossiers au client
             client->write(block);
-
-
         }
         else {
             qDebug() << "Error waiting for data from client";
         }
     }
 }
-
 
 int main(int argc, char *argv[])
 {

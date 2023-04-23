@@ -2,8 +2,9 @@
 #include <QDebug>
 #include <QRegularExpression>
 #include "inputvalidator.h"
+#include "fsm.h"
+#include <QDebug>
 #include "sqldatabase.h"
-
 
 Lexer::Lexer(const QString& input) : input(input) {}
 
@@ -38,5 +39,14 @@ QVector<Token> Lexer::tokenize() {
            qDebug() << "Probleme input:" << input;
            return QVector<Token>();
        }
+
+
+    if (tokens.isEmpty()) {
+        qDebug() << "Lexer error.";
+    } else if (parseInput(tokens)) {
+        qDebug() << "FSM error.";
+    } else {
+        qDebug() << "Input is valid.";
+    }
     return tokens;
 }

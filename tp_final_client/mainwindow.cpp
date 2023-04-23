@@ -15,7 +15,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->btnTxt, &QPushButton::clicked, this, &MainWindow::on_btnTxt_clicked);
     QComboBox *myComboBox = findChild<QComboBox*>("type");
     if (myComboBox) {
-        QStringList items = {"image", "text", "exec"};
+        QStringList items = {"image", "text", "exec", "audio", "video", "archive", "unknown", "all"};
         myComboBox->addItems(items);
     }
 }

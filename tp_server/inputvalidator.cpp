@@ -17,7 +17,7 @@ bool validateFileType(const QString& fileType) {
 bool validateFileTypeAndExtension(const QString& fileType, const QString& fileExtension) {
     // Code de validation de type de fichier
     if (fileType == "exec") {
-        return fileExtension == "sh" || fileExtension == "jar";
+        return fileExtension == "sh" || fileExtension == "jar" || fileExtension == "url"|| fileExtension == "lnk";
     } else if (fileType == "text") {
         return fileExtension == "txt" || fileExtension == "pdf" || fileExtension == "doc" || fileExtension == "docx";
     } else if (fileType == "image") {
@@ -36,7 +36,7 @@ bool validateFileTypeAndExtension(const QString& fileType, const QString& fileEx
 // Vérifie la validité de l'extension de fichier
 bool validateFileExtension(const QString& fileExtension) {
     // Code de validation d'extension de fichier
-    return fileExtension == "sh" || fileExtension == "jar" || fileExtension == "txt" ||
+    return fileExtension == "url"|| fileExtension == "lnk"|| fileExtension == "sh" || fileExtension == "jar" || fileExtension == "txt" ||
            fileExtension == "png" || fileExtension == "jpg" || fileExtension == "pdf" ||
            fileExtension == "doc" || fileExtension == "docx" || fileExtension == "xls" ||
            fileExtension == "xlsx" || fileExtension == "ppt" || fileExtension == "pptx" ||
@@ -53,16 +53,23 @@ bool validateDate(const QString& Date) {
         return DateTime.isValid();
 }
 
-//bool validateDateRange(const QString& minDate, const QString& maxDate) {
-//    // Vérifie si la date minimale est inférieure ou égale à la date maximale
-//    return minDateTime <= maxDateTime;
-//}
+bool validateDateRange(const QString& minDate, const QString& maxDate) {
+    // Vérifie si la date minimale est inférieure ou égale à la date maximale
+    return minDate <= maxDate;
+}
 
-
+bool validateSizeRange(const QString& minFileSize, const QString& maxFileSize) {
+    // Vérifie si la size minimale est inférieure ou égale à la size maximale
+    return minFileSize <= maxFileSize;
+}
 // Vérifie la validité de la taille minimale de fichier
 bool validateMinFileSize(qint64 minFileSize) {
     // Code de validation de taille minimale de fichier
     return minFileSize >= 0;
+}
+
+bool validateCorrelation(const QString& fileType, const QString& fileExtension, const QString& minDate, const QString& maxDate,const QString& minFileSize, const QString& maxFileSize) {
+    return validateDateRange(minDate,maxDate) && validateFileTypeAndExtension(fileType,fileExtension) && validateSizeRange(minFileSize, maxFileSize);
 }
 
 // Vérifie la validité de la taille maximale de fichier
@@ -77,50 +84,43 @@ bool validateInput(const QList<Token>& tokens) {
     QString fileExtensionValue = "";
     QString fileTypeValue = "";// initialiser à une valeur par défaut
     QString MinDateValue = "";// initialiser à une valeur par défaut
-    QString MaxDateValue = "";
-    QString MinSizeValue = "";
+    QString MaxDateValue = "";// initialiser à une valeur par défaut
+    QString MinSizeValue = "";// initialiser à une valeur par défaut
     QString MaxSizeValue = "";// initialiser à une valeur par défaut
     for (const auto& token : tokens) {
         switch (token.type) {
             case TokenType::FileName:
                 isValid = isValid && validateFileName(token.value);
-                qDebug() << "FileName input:" << isValid;
                 break;
             case TokenType::FileType:
                 fileTypeValue = token.value;
                 isValid = isValid && validateFileType(token.value);
-                qDebug() << "token.value" << token.value;
-                qDebug() << "FileType input:" << isValid;
                 break;
             case TokenType::FileExtension:
                 fileExtensionValue = token.value; // mettre à jour la valeur de la variable
                 isValid = isValid && validateFileExtension(token.value);
-                qDebug() << "FileExtension input:" << isValid;
                 break;
             case TokenType::MinDate:
                 MinDateValue = token.value;
                 isValid = isValid && validateDate(token.value);
-                qDebug() << "MinDate input:" << isValid;
                 break;
             case TokenType::MaxDate:
                 MaxDateValue = token.value;
                 isValid = isValid && validateDate(token.value);
-                qDebug() << "MaxDate input:" << isValid;
                 break;
             case TokenType::MinFileSize:
                 MinSizeValue = token.value;
                 isValid = isValid && validateMinFileSize(token.value.toLongLong());
-                qDebug() << "MinFileSize input:" << isValid;
                 break;
             case TokenType::MaxFileSize:
                 MaxSizeValue  = token.value;
                 isValid = isValid && validateMaxFileSize(token.value.toLongLong());
-                qDebug() << "MaxFileSize input:" << isValid;
                 break;
             default:
                 // Token invalide
                 break;
         }
     }
+    isValid = isValid && validateCorrelation(fileExtensionValue,fileTypeValue, MinDateValue,MaxDateValue,MinSizeValue,MaxSizeValue);
     return isValid;
 }

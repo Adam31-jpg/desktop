@@ -8,6 +8,6 @@
 
 
 
-QList<QString> listFileInfo(const QString& path);
+void listFileInfo(const QString& path);
 
 #endif // LISTPATH_H

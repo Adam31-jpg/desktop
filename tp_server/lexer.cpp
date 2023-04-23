@@ -2,6 +2,7 @@
 #include <QDebug>
 #include <QRegularExpression>
 #include "inputvalidator.h"
+#include "sqldatabase.h"
 
 
 Lexer::Lexer(const QString& input) : input(input) {}
@@ -37,6 +38,5 @@ QVector<Token> Lexer::tokenize() {
            qDebug() << "Probleme input:" << input;
            return QVector<Token>();
        }
-
     return tokens;
 }

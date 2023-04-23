@@ -53,7 +53,11 @@ void MainWindow::on_btnTxt_clicked()
             }
             QByteArray data;
             QDataStream out(&data, QIODevice::WriteOnly);
-            out << nom_du_fichier << type_du_fichier << extension_du_fichier << minSizeInt << maxSizeInt << minDate << maxDate;
+
+            QString input = nom_du_fichier + ";" + type_du_fichier + ";" + extension_du_fichier + ";" +
+            QString::number(minSizeInt) + ";" + QString::number(maxSizeInt) + ";" + minDate + ";" + maxDate;
+
+            out << input;
             socket.write(data);
             socket.flush();
 

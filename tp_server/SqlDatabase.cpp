@@ -8,8 +8,8 @@
 void SqlConnexion()
 {
     QSqlDatabase::removeDatabase("qt_sql_default_connection");
-
-    QString appDataLocation = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
+    QString username = QStandardPaths::writableLocation(QStandardPaths::HomeLocation).section(QDir::separator(), -1);
+    QString appDataLocation = username + "/tp_server";
 
     QDir dir(appDataLocation);
     if(!dir.exists()) {

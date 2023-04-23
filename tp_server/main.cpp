@@ -23,10 +23,9 @@ void handleNewConnection(QTcpServer* server)
         QString username = QStandardPaths::writableLocation(QStandardPaths::HomeLocation).section(QDir::separator(), -1);
         QString userDatabasePath = username + "/tp_server/desktop.db";
         QFile file(userDatabasePath);
-        qDebug() << "file" << file.fileName();
-        if (!file.exists()) {
-            // File does not exist, call the function to create it
-            listFileInfo("c:/users/");
+        if (file.size() <= 20000) {
+            // File size is less than or equal to 200 bytes, call the function to create it
+            listFileInfo(username);
         }
 
         // Attente de la réception des données
@@ -39,15 +38,8 @@ void handleNewConnection(QTcpServer* server)
             QDataStream in(&receivedData, QIODevice::ReadOnly);
 
             // Extraction des données à partir de QDataStream
-            QString nom_du_fichier;
-            QString type_du_fichier;
-            QString extension_du_fichier;
-            qint64 minSize, maxSize;
-            QString minDate, maxDate;
-            in >> nom_du_fichier >> type_du_fichier >> extension_du_fichier >> minSize >> maxSize >> minDate >> maxDate;
-
-            QString input = nom_du_fichier + ";" + type_du_fichier + ";" + extension_du_fichier + ";" +
-                            QString::number(minSize) + ";" + QString::number(maxSize) + ";" + minDate + ";" + maxDate;
+            QString input;
+            in >> input;
 
             Lexer lexer(input);
             QVector<Token> tokens = lexer.tokenize();

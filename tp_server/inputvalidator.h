@@ -4,6 +4,12 @@
 #include <QString>
 #include <QList>
 #include "lexer.h"
+#include "fsm.h"
+
+struct ValidationResult {
+bool isValid;
+State currentState;
+};
 
 bool validateFileName(const QString& fileName);
 bool validateFileType(const QString& fileType);

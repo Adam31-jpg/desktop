@@ -40,13 +40,5 @@ QVector<Token> Lexer::tokenize() {
            return QVector<Token>();
        }
 
-
-    if (tokens.isEmpty()) {
-        qDebug() << "Lexer error.";
-    } else if (parseInput(tokens)) {
-        qDebug() << "FSM error.";
-    } else {
-        qDebug() << "Input is valid.";
-    }
     return tokens;
 }

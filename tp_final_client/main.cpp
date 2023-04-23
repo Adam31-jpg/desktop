@@ -9,57 +9,11 @@
 #include <QThread>
 #include "mainwindow.h"
 
-void waitForData(QTcpSocket* socket, MainWindow* window)
+void waitForData(QTcpSocket* socketPtr, MainWindow* window)
 {
-    while (socket->state() == QAbstractSocket::ConnectedState)
-    {
-        // Vérifier si de nouvelles données sont disponibles pour la lecture
-        if (socket->waitForReadyRead(10000))
-        {
-            QByteArray receivedData = socket->readAll();
-
-            // Création d'un objet QDataStream pour décoder les données
-            QDataStream in(&receivedData, QIODevice::ReadOnly);
-
-            // Lecture de la liste des noms de dossiers envoyée par le serveur
-            QList<QString> folderNames;
-            in >> folderNames;
-
-            // Créer un modèle pour la liste
-            QStringListModel* model = new QStringListModel(window);
-
-            // Ajouter les noms de dossiers au modèle
-            model->setStringList(folderNames);
-
-            // Affecter le modèle à la QListView
-            window->setListModel(model);
-
-            // Affichage des noms de dossiers
-            for (const QString& folderName : folderNames)
-            {
-                qDebug() << folderName;
-            }
-        }
-        else
-        {
-            qDebug() << "Waiting for data from server";
-
-            // Ajouter un délai pour éviter un blocage infini
-            QThread::msleep(100);
-        }
-    }
-
-    qDebug() << "Disconnected from server";
-
-}
-
-int main(int argc, char *argv[])
-{
-    QApplication a(argc, argv);
-    MainWindow w;
-    w.show();
-
+    // Créer un objet QTcpSocket pour ce thread
     QTcpSocket socket;
+    socket.moveToThread(qApp->thread()); // déplacer l'objet socket dans le thread courant
 
     // Connexion à l'hôte distant
     socket.connectToHost("localhost", 8080);
@@ -69,15 +23,49 @@ int main(int argc, char *argv[])
     {
         qDebug() << "Connected to server";
 
-        // Lancement de la boucle principale dans un thread séparé
-        QThread* thread = new QThread;
-        QObject::connect(thread, &QThread::started, [&socket, &w]() { waitForData(&socket, &w); });
-        thread->start();
+        do {
+            if (socket.waitForReadyRead())
+            {
+                QByteArray receivedData = socket.readAll();
+
+                QDataStream in(&receivedData, QIODevice::ReadOnly);
+
+                QList<QString> folderNames;
+                in >> folderNames;
+
+                qDebug() << "Received data from server:" << folderNames;
+
+                QStringListModel* model = new QStringListModel(window);
+                model->setStringList(folderNames);
+                window->setListModel(model);
+            }
+            else
+            {
+                qDebug() << "Waiting for data from server...";
+            }
+        } while (socket.state() == QAbstractSocket::ConnectedState);
+
+        qDebug() << "Disconnected from server";
     }
     else
     {
         qDebug() << "Could not connect to server";
     }
+}
+
+
+int main(int argc, char *argv[])
+{
+    QApplication a(argc, argv);
+    MainWindow w;
+    w.show();
+
+    // Création de la socket et connexion du signal started de QThread à une lambda qui appelle waitForData
+    QTcpSocket socket;
+    QThread* thread = new QThread;
+    QObject::connect(thread, &QThread::started, [&socket, &w]() { waitForData(&socket, &w); });
+
+    thread->start();
 
     return a.exec();
 }

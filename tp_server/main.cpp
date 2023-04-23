@@ -11,21 +11,13 @@
 #include "lexer.h"
 #include "inputvalidator.h"
 
+
 void handleNewConnection(QTcpServer* server)
 {
     while (server->hasPendingConnections())
     {
         QTcpSocket* client = server->nextPendingConnection();
         qDebug() << "New client connected";
-
-        QByteArray block;
-        QDataStream out(&block, QIODevice::WriteOnly);
-
-        QList<QString> folderNames = listFileInfo("c:/users/florian/launcher");
-        out << folderNames;
-
-        // Envoi de la liste des noms de dossiers au client
-        client->write(block);
 
         // Attente de la réception des données
         if (client->waitForReadyRead()) {
@@ -39,24 +31,27 @@ void handleNewConnection(QTcpServer* server)
             // Extraction des données à partir de QDataStream
             QString nom_du_fichier;
             QString type_du_fichier;
-            QString extention_du_fichier;
+            QString extension_du_fichier;
             qint64 minSize, maxSize;
             QString minDate, maxDate;
-            in >> nom_du_fichier >> type_du_fichier >> extention_du_fichier >> minSize >> maxSize >> minDate >> maxDate;
+            in >> nom_du_fichier >> type_du_fichier >> extension_du_fichier >> minSize >> maxSize >> minDate >> maxDate;
 
-            QString input = nom_du_fichier + ";" + type_du_fichier + ";" + extention_du_fichier + ";" +
+            QString input = nom_du_fichier + ";" + type_du_fichier + ";" + extension_du_fichier + ";" +
                             QString::number(minSize) + ";" + QString::number(maxSize) + ";" + minDate + ";" + maxDate;
-
-            qDebug() << "input" << input;
 
             Lexer lexer(input);
             QVector<Token> tokens = lexer.tokenize();
+            QList<QString> folderNames = ReturnSqlData(tokens);
 
-            for (const Token& token : tokens) {
-                qDebug() << "Token name:" << token.value;
-            }
-            //C'est ici que j'ai recu les données du client
-            // Utilisation des données extraites
+            QByteArray block;
+            QDataStream out(&block, QIODevice::WriteOnly);
+            qDebug() << "folderNames" << folderNames;
+            out << folderNames;
+            qDebug() << "out" << folderNames;
+            client->waitForBytesWritten(); // Attendre la fin de l'envoi des données
+            // Envoi de la liste des noms de dossiers au client
+            client->write(block);
+
 
         }
         else {
@@ -64,6 +59,7 @@ void handleNewConnection(QTcpServer* server)
         }
     }
 }
+
 
 int main(int argc, char *argv[])
 {

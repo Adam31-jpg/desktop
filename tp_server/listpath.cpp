@@ -13,7 +13,11 @@ void listFileInfo(const QString& path)
 {
 
     QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
-    db.setDatabaseName("C:/Users/Florian/AppData/Roaming/tp_server/desktop.db");
+    QString username = QStandardPaths::writableLocation(QStandardPaths::HomeLocation).section(QDir::separator(), -1);
+    QString userDatabasePath = username + "/tp_server/desktop.db";
+    qDebug() << "Nom d'utilisateur actuel : " << username;
+    qDebug() << "Chemin de la base de données : " << userDatabasePath;
+    db.setDatabaseName(userDatabasePath);
     if (!db.open()) {
         qDebug() << "Failed to open database";
         return;

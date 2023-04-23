@@ -9,6 +9,7 @@
 #include <QString>
 #include <QDateTime>
 #include "lexer.h"
+#include "inputvalidator.h"
 
 void handleNewConnection(QTcpServer* server)
 {

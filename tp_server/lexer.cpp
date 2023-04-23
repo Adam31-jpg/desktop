@@ -33,9 +33,8 @@ QVector<Token> Lexer::tokenize() {
     tokens.append(Token(TokenType::MaxFileSize, QString::number(MaxFileSize)));
     tokens.append(Token(TokenType::MinDate, MinDate));
     tokens.append(Token(TokenType::MaxDate, MaxDate));
-
     if (!validateInput(tokens)) {
-           qDebug() << "Invalid input:" << input;
+           qDebug() << "Probleme input:" << input;
            return QVector<Token>();
        }
 

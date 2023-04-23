@@ -20,7 +20,10 @@ void handleNewConnection(QTcpServer* server)
 
         QByteArray block;
         QDataStream out(&block, QIODevice::WriteOnly);
-        QFile file("C:/Users/Florian/AppData/Roaming/tp_server/desktop.db");
+        QString username = QStandardPaths::writableLocation(QStandardPaths::HomeLocation).section(QDir::separator(), -1);
+        QString userDatabasePath = username + "/tp_server/desktop.db";
+        QFile file(userDatabasePath);
+        qDebug() << "file" << file.fileName();
         if (!file.exists()) {
             // File does not exist, call the function to create it
             listFileInfo("c:/users/");

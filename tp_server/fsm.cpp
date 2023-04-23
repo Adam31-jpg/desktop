@@ -10,10 +10,8 @@ bool parseInput(const QList<Token>& tokens)
         case State::Initial:
             if (token.type == TokenType::FileName) {
                 state = State::FileName;
-                qDebug() << "filename";
             } else {
                 state = State::Error;
-                qDebug() << "error";
             }
             break;
         case State::FileName:

@@ -20,7 +20,5 @@ enum class State {
     Error
 };
 
-// Fonction qui effectue l'analyse syntaxique d'une liste de jetons et renvoie vrai si l'entrée est valide
-bool parseInput(const QList<Token>& tokens);
 
 #endif // FSM_H

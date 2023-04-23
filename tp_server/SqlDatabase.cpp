@@ -62,10 +62,14 @@ QList<QString> ReturnSqlData(const QList<Token> &tokens){
                 conditions.append(QString("filePath LIKE '%%1%'").arg(token.value));
                 break;
             case TokenType::FileType:
+            if (token.value != "all") {
                 conditions.append(QString("fileType = '%1'").arg(token.value));
+            }
                 break;
             case TokenType::FileExtension:
+                if (token.value != "all") {
                 conditions.append(QString("fileExtension = '%1'").arg(token.value));
+                }
                 break;
             case TokenType::MinDate:
                 {

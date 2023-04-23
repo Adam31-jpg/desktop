@@ -10,27 +10,30 @@ bool validateFileName(const QString& fileName) {
 // Vérifie la validité du type de fichier
 bool validateFileType(const QString& fileType) {
     // Code de validation de type de fichier
-    return fileType == "exec" || fileType == "text" || fileType == "image" || fileType == "audio" ||fileType == "video" || fileType == "archive";
+    return fileType == "exec" || fileType == "text" || fileType == "image" || fileType == "audio" ||fileType == "video" || fileType == "archive" || fileType == "unknown" || fileType == "all";
 }
 
 // Vérifie la validité du type de fichier et l'extension qui lui correspond
 bool validateFileTypeAndExtension(const QString& fileType, const QString& fileExtension) {
     // Code de validation de type de fichier
-    if (fileType == "exec") {
-        return fileExtension == "sh" || fileExtension == "jar" || fileExtension == "url"|| fileExtension == "lnk";
-    } else if (fileType == "text") {
-        return fileExtension == "txt" || fileExtension == "pdf" || fileExtension == "doc" || fileExtension == "docx";
-    } else if (fileType == "image") {
-        return fileExtension == "png" || fileExtension == "jpg" || fileExtension == "gif" || fileExtension == "bmp" || fileExtension == "tif";
-    } else if (fileType == "audio") {
-        return fileExtension == ".mp3";
-    } else if (fileType == "video") {
-        return fileExtension == "mp4" || fileExtension == "avi" || fileExtension == "mov" || fileExtension == "wmv";
-    } else if (fileType == "archive") {
-        return fileExtension == "zip" || fileExtension == "rar" || fileExtension == "7z" || fileExtension == "tar" || fileExtension == "gz";
-    } else {
-        return true;
+    if (fileExtension != "all") {
+        if (fileType == "exec") {
+            return fileExtension == "sh" || fileExtension == "jar" || fileExtension == "url"|| fileExtension == "lnk" || fileExtension == "exe";
+        } else if (fileType == "text") {
+            return fileExtension == "txt" || fileExtension == "pdf" || fileExtension == "doc" || fileExtension == "docx" || fileExtension == "json" || fileExtension == "lock";
+        } else if (fileType == "image") {
+            return fileExtension == "png" || fileExtension == "jpg" || fileExtension == "gif" || fileExtension == "bmp" || fileExtension == "tif" || fileExtension == "jpeg";
+        } else if (fileType == "audio") {
+            return fileExtension == ".mp3";
+        } else if (fileType == "video") {
+            return fileExtension == "mp4" || fileExtension == "avi" || fileExtension == "mov" || fileExtension == "wmv";
+        } else if (fileType == "archive") {
+            return fileExtension == "zip" || fileExtension == "rar" || fileExtension == "7z" || fileExtension == "tar" || fileExtension == "gz";
+        } else {
+            return true;
+        }
     }
+    return true;
 }
 
 // Vérifie la validité de l'extension de fichier
@@ -43,7 +46,7 @@ bool validateFileExtension(const QString& fileExtension) {
            fileExtension == "mp3" || fileExtension == "mp4" || fileExtension == "avi" ||
            fileExtension == "mov" || fileExtension == "wmv" || fileExtension == "gif" ||
            fileExtension == "bmp" || fileExtension == "tif" || fileExtension == "zip" ||
-           fileExtension == "rar" || fileExtension == "7z" || fileExtension == "tar" || fileExtension == "gz";
+           fileExtension == "rar" || fileExtension == "7z" || fileExtension == "tar" || fileExtension == "gz" || fileExtension == "all";
 }
 
 

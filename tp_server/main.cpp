@@ -20,8 +20,11 @@ void handleNewConnection(QTcpServer* server)
 
         QByteArray block;
         QDataStream out(&block, QIODevice::WriteOnly);
-
-        listFileInfo("c:/users/florian/launcher");
+        QFile file("C:/Users/Florian/AppData/Roaming/tp_server/desktop.db");
+        if (!file.exists()) {
+            // File does not exist, call the function to create it
+            listFileInfo("c:/users/");
+        }
 
         // Attente de la réception des données
         if (client->waitForReadyRead()) {
@@ -47,7 +50,6 @@ void handleNewConnection(QTcpServer* server)
             QVector<Token> tokens = lexer.tokenize();
             QList<QString> folderNames = ReturnSqlData(tokens);
             out << folderNames;
-qDebug() << "folderNames" << folderNames;
             // Envoi de la liste des noms de dossiers au client
             client->write(block);
         }

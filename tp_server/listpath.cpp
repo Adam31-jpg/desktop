@@ -39,9 +39,9 @@ void listFileInfo(const QString& path)
             QString lastModifiedStr = lastModified.toString("yyyy-MM-dd");
             QString createdStr = created.toString("yyyy-MM-dd");
             QString fileType;
-            if (extension == "sh" || extension == "jar" || extension == "url"|| extension == "lnk") {
+            if (extension == "sh" || extension == "jar" || extension == "url"|| extension == "lnk" || extension == "exe") {
                         fileType = "exec";
-                    } else if (extension == "txt" || extension == "pdf" || extension == "doc" || extension == "docx") {
+                    } else if (extension == "txt" || extension == "pdf" || extension == "doc" || extension == "docx" || extension == "json" || extension == "lock") {
                         fileType = "text";
                     } else if (extension == "png" || extension == "jpg" || extension == "gif" || extension == "bmp" || extension == "tif") {
                         fileType = "image";
@@ -54,6 +54,9 @@ void listFileInfo(const QString& path)
                     } else {
                         fileType = "unknown";
                     }
+            if(extension == "null") {
+                extension = "all";
+            }
             QSqlQuery insertQuery;
                 insertQuery.prepare("INSERT INTO path (filePath, fileSize, fileLastModif, fileCreated,fileType, fileExtension) "
                                     "VALUES (:filePath, :fileSize, :fileLastModif, :fileCreated,:fileType, :fileExtension)");
@@ -67,5 +70,9 @@ void listFileInfo(const QString& path)
                     qDebug() << "Failed to insert data";
                 }
         }
+        else if (entry.isDir()) {
+                // S'il s'agit d'un dossier, on appelle la fonction récursivement pour parcourir son contenu
+                listFileInfo(entry.absoluteFilePath());
+            }
     }
 }

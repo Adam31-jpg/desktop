@@ -19,19 +19,14 @@ bool parseInput(const QList<Token>& tokens)
         case State::FileName:
             if (token.type == TokenType::FileExtension) {
                 state = State::FileExtension;
-                qDebug() << "extention";
             } else if (token.type == TokenType::FileType) {
                 state = State::FileType;
-                qDebug() << "type";
             } else if (token.type == TokenType::MinDate) {
                 state = State::MinDate;
-                qDebug() << "mindate";
             } else if (token.type == TokenType::MinFileSize) {
                 state = State::MinFileSize;
-                qDebug() << "minsize";
             } else {
                 state = State::Error;
-                qDebug() << "error";
             }
             break;
         case State::FileType:
